@@ -64,7 +64,15 @@
   addEventListener('resize', resize); resize();
 
   let clear = 0, clearTarget = 0, wind = [.018,.006], t0 = performance.now();
+  let idleCleared = false;
   function frame(now){
+    // на рабочей карте облака не рисуем — экономим видеокарту
+    const b = document.body.classList;
+    if(b.contains('state-map') && !b.contains('covered')){
+      if(!idleCleared){ gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT); idleCleared = true; }
+      requestAnimationFrame(frame); return;
+    }
+    idleCleared = false;
     clear += (clearTarget - clear)*0.02;
     gl.uniform1f(uT, (now - t0)/1000);
     gl.uniform2f(uR, canvas.width, canvas.height);

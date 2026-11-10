@@ -50,6 +50,13 @@ const map = new maplibregl.Map({
   attributionControl:{compact:true}
 });
 window.GPMap = map;
+// страховка: если задача отрисовки упала, карта не должна замирать навсегда
+(function guardRenderQueue(){
+  const q = map._renderTaskQueue;
+  if(!q || typeof q.run !== 'function') return;
+  const run = q.run.bind(q);
+  q.run = function(t){ try{ return run(t); }catch(e){ console.error('[карта] ошибка в кадре отрисовки:', e); this._currentlyRunning = false; map.triggerRepaint(); } };
+})();
 let satFails = 0;
 let demFails = 0;
 map.on('error', e => {
