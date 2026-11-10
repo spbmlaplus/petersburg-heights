@@ -5,7 +5,7 @@ window.GP = (function(){
     snow:'#F4F6F5', ink:'#14181A', graphite:'#F4F6F5', pink:'#FF3E9A',
     ochre:'#2C6BFF', clay:'#3BA3FF', ice:'#7FD0FF', sea:'#BFEAFF',
     indigo:'#FF7A1A', gold:'#FFB066', parchment:'#FFD9A8', cinnabar:'#E8382B',
-    lavender:'#FF9CCB', concrete:'#FF7DBA'
+    lavender:'#FF9CCB', concrete:'#FFC4DF'
   };
 
   // шкала времени

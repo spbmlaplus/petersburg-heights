@@ -174,8 +174,8 @@ map.on('load', () => {
     'circle-radius':['+',['interpolate',['linear'],['sqrt',['to-number',['get','population'],100]],0,2,300,14], ['case',HOVER,2,0]],
     'circle-stroke-color':['case',SEL,C.pink,'#111416'],'circle-stroke-width':1.2}}], 'finns_today');
   // новое расселение: скруглённые пятна с размытым краем — «тепловые облака»
-  add('bubbles', [{id:'bubbles-g', type:'line', paint:{'line-color':C.concrete,'line-width':10,'line-blur':10,'line-opacity':0.5}},
-                  {id:'bubbles-f', type:'fill', paint:{'fill-color':C.concrete,'fill-opacity':hov(0.38,0.55,0.65)}}], 'bubbles');
+  add('bubbles', [{id:'bubbles-g', type:'line', paint:{'line-color':C.concrete,'line-width':5,'line-blur':5,'line-opacity':0.18}},
+                  {id:'bubbles-f', type:'fill', paint:{'fill-color':C.concrete,'fill-opacity':hov(0.14,0.4,0.5)}}], 'bubbles');
   add('walking', [{id:'walking', type:'line', paint:{'line-color':C.lavender,'line-dasharray':[2,1.5],'line-opacity':['case',HOVER,1,SEL,1,0.7],'line-width':hov(1,2.2,2.8)}}], 'walking');
   add('routes', [{id:'routes-c', type:'line', layout:{'line-cap':'round','line-join':'round'}, paint:{'line-color':'#111416','line-width':5.5,'line-opacity':0.7}},
                  {id:'routes', type:'line', layout:{'line-cap':'round','line-join':'round'}, paint:{'line-color':C.lavender,'line-width':hov(2.6,3.6,4.2)}}], 'routes');
