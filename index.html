@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Горные просторы. Петербургский амфитеатр</title>
+<meta name="description" content="Горы вокруг Петербурга: от древних морей и ледников до финских деревень, дворцов с панорамами и сегодняшних склонов. Карта и истории экспедиции.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body class="state-cover">
+
+<div id="map" aria-label="Карта Петербургского амфитеатра"></div>
+<div class="grade" aria-hidden="true"></div>
+<canvas id="clouds" aria-hidden="true"></canvas>
+
+<header class="topbar">
+  <span class="brand">MLA+</span>
+  <button class="brand-center" id="home" title="На обложку">
+    <svg viewBox="0 0 40 22" aria-hidden="true"><path d="M1 21 L12 6 L18 13 L25 3 L39 21"/></svg>
+    <span>Горные просторы</span>
+  </button>
+  <button class="finds-pill" id="findsBtn" aria-controls="finds" aria-expanded="false">Находки <b id="findsCount">0</b></button>
+</header>
+
+<!-- 1. Обложка -->
+<section class="cover" id="cover">
+  <h1>Горные<br>просторы</h1>
+  <p class="lead">Петербург считают плоским. Вокруг него — амфитеатр из&nbsp;холмов, гребней и&nbsp;древних уступов</p>
+  <button class="btn" id="enter">Открыть горы</button>
+</section>
+
+<!-- 2. Приветствие -->
+<section class="welcome" id="welcome" aria-hidden="true">
+  <div class="welcome-inner">
+    <p class="welcome-first">Петербург принято считать плоским городом. Но&nbsp;его окружает целый амфитеатр из&nbsp;холмов, гребней и&nbsp;древних уступов. Так началось наше исследование&nbsp;— попытка взглянуть на&nbsp;знакомый город через его горный ландшафт.</p>
+    <p>От древних морей и&nbsp;ледников до&nbsp;первых финских поселений, дворянских усадеб и&nbsp;дворцов, возведённых ради захватывающих панорам. Горы служили источником строительных материалов, местом научных открытий, а&nbsp;во&nbsp;времена опасности&nbsp;— естественными рубежами защиты города.</p>
+    <p>В поисках этих историй пришлось объехать весь Петербургский амфитеатр, подняться на&nbsp;вершины, отыскать исторические панорамы и&nbsp;поговорить с&nbsp;местными жителями. Результатом стал маршрут, соединяющий ключевые видовые точки, откуда Петербург открывается с&nbsp;его архитектурными доминантами, историческими силуэтами и&nbsp;бескрайними просторами.</p>
+    <p class="welcome-turn">Теперь очередь за&nbsp;вами. Кто вы?</p>
+    <div class="roles">
+      <button class="role" data-role="explorer">
+        <span class="role-title">Исследователь</span>
+        <svg class="role-line" viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true"><path d="M0 9 C30 3 45 12 70 7 S115 2 135 8 S175 12 200 5"/></svg>
+        <span class="role-text">Самостоятельно открывать горы, листать время и&nbsp;собирать свои находки</span>
+      </button>
+      <button class="role" data-role="reader">
+        <span class="role-title">Читатель</span>
+        <svg class="role-line" viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6 C25 11 50 3 80 8 S130 12 150 6 S185 2 200 9"/></svg>
+        <span class="role-text">Пройти по&nbsp;историям экспедиции: от&nbsp;древнего моря до&nbsp;сегодняшних склонов</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Закладки-истории -->
+<nav class="tabs" id="tabs" aria-label="Истории"></nav>
+
+<!-- обложка истории -->
+<section class="story-cover" id="storyCover" aria-hidden="true">
+  <img id="scImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="">
+  <div class="sc-body">
+    <p class="sc-num" id="scNum"></p>
+    <h2 class="sc-title" id="scTitle"></h2>
+    <p class="sc-lead" id="scLead"></p>
+    <div class="sc-actions">
+      <button class="btn btn-pink" id="scStart">Начать историю</button>
+      <button class="link" id="scClose">Вернуться к карте</button>
+    </div>
+  </div>
+  <p class="sc-credit" id="scCredit"></p>
+</section>
+
+<!-- шаг истории: подпись к карте, как музейная этикетка -->
+<aside class="story" id="story" aria-live="polite" hidden>
+  <div class="story-head">
+    <p class="story-name" id="stName"></p>
+    <span class="story-count" id="stCount"></span>
+    <button class="story-x" id="storyX" aria-label="Закрыть историю">×</button>
+  </div>
+  <div class="story-scroll" id="stScroll">
+    <h3 id="stSub"></h3>
+    <div class="story-text" id="stText"></div>
+    <figure id="stFig" hidden><img id="stImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt=""><figcaption>Нажмите, чтобы увеличить</figcaption></figure>
+    <p class="story-look" id="stLook"></p>
+  </div>
+  <div class="story-nav">
+    <button class="link" id="stPrev">Назад</button>
+    <div class="dots" id="stDots" aria-hidden="true"></div>
+    <button class="btn btn-small" id="stNext">Дальше</button>
+  </div>
+</aside>
+
+<!-- карточка объекта -->
+<aside class="card" id="card" hidden>
+  <button class="card-x" id="cardX" aria-label="Закрыть карточку">×</button>
+  <button class="link card-back" id="cardBack" hidden>← к записи</button>
+  <p class="card-kicker" id="cKick"></p>
+  <h3 class="card-title" id="cTitle"></h3>
+  <p class="card-meta" id="cMeta"></p>
+  <div class="card-photos" id="cPhotos"></div>
+  <div class="card-text" id="cText"></div>
+  <p class="card-explain" id="cExplain"></p>
+  <div class="card-actions">
+    <button class="btn btn-small" id="cSave">В находки</button>
+    <button class="link" id="cZoom">Приблизить</button>
+  </div>
+</aside>
+
+<!-- находки -->
+<aside class="finds" id="finds" hidden>
+  <div class="finds-head"><h3>Мои находки</h3><button class="card-x" id="findsX" aria-label="Закрыть">×</button></div>
+  <ol id="findsList"></ol>
+  <p class="finds-empty" id="findsEmpty">Пока пусто. Откройте любой объект на&nbsp;карте и&nbsp;нажмите «В&nbsp;находки».</p>
+</aside>
+
+<!-- шкала времени -->
+<div class="timebar" id="timebar">
+  <div class="time-track" id="timeTrack" role="tablist" aria-label="Эпохи"></div>
+  <label class="relief"><span>Объём</span><input type="range" id="exag" min="1" max="10" step="0.5" value="5"><output id="exagOut">×5</output></label>
+</div>
+
+<div class="legend" id="legend" aria-label="Слои на карте"></div>
+<div class="tip" id="tip" role="tooltip" hidden></div>
+<p class="hint" id="hint" hidden>Внизу шкала времени, справа истории. Нажмите на любой объект на карте, чтобы узнать, что это.</p>
+<div class="lightbox" id="lightbox" hidden><img id="lbImg" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt=""><p id="lbCap"></p><button class="card-x" id="lbX" aria-label="Закрыть">×</button></div>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="config.js"></script>
+<script src="data/base.js"></script>
+<script src="data/epochs.js"></script>
+<script src="data/labels.js"></script>
+<script src="data/media.js"></script>
+<script src="js/stories-data.js"></script>
+<script src="js/config-layers.js"></script>
+<script src="js/clouds.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
